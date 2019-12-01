@@ -36,6 +36,10 @@ func main() {
 			mass = fuel
 		}
 	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading file: %s\n", err)
+		os.Exit(1)
+	}
 
 	fmt.Printf("Total Fuel: %d\n", fuelSum)
 }
