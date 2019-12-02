@@ -19,15 +19,18 @@ func TestExecution(t *testing.T) {
 		input_opcodes, err := ParseProgram(test.input)
 		if err != nil {
 			t.Errorf("Error parsing input: %s", err)
+			continue
 		}
 		output_opcodes, err := ParseProgram(test.output)
 		if err != nil {
 			t.Errorf("Error parsing output: %s", err)
+			continue
 		}
 
 		err = ExecuteProgram(input_opcodes)
 		if err != nil {
 			t.Errorf("Error executing program: %s", err)
+			continue
 		}
 
 		if !OpcodesEqual(input_opcodes, output_opcodes) {
