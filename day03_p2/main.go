@@ -9,6 +9,22 @@ import (
 	"strings"
 )
 
+/*
+It is worth a little explanation to describe the fairly complex structure holding
+the wire distances here. I have made a
+
+	map[Point]map[string]int
+
+which is a map with Point keys and map values, the value maps have string keys and
+integer values. I am storing at each point a travel distance for each wire, indexed
+by point in the top map, and by wire identifier in the second level maps, I store the
+wire travel distance.
+
+A complication is that I check if a value is already there for that point and wire, as
+only the lowest travel distance should be saved. I then look for any intersection by
+looking for points with more than two wires.
+*/
+
 func main() {
 	f, err := os.Open("input.txt")
 	if err != nil {
