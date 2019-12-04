@@ -44,9 +44,17 @@ int main(int argc, char *argv[]) {
   fclose(fp);
 
   grid_one = hashtable_create(65536, NULL);
+  if(grid_one == NULL) {
+    fprintf(stderr, "Unable to create first grid\n");
+    exit(1);
+  }
   build_grid(grid_one, path_one);
 
   grid_two = hashtable_create(65536, NULL);
+  if(grid_two == NULL) {
+    fprintf(stderr, "Unable to create second grid\n");
+    exit(1);
+  }
   build_grid(grid_two, path_two);
 
   iterator = hashtable_iterator_create(grid_one);
