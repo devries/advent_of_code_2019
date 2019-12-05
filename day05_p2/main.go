@@ -121,8 +121,10 @@ func ParameterMode(opcodes []int, ptr int, parameter int) int {
 
 	switch parameter_mode {
 	case 0:
+		// Position mode (return value at the position of parameter)
 		return opcodes[opcodes[ptr+parameter]]
 	case 1:
+		// Immediate mode (return value of parameter)
 		return opcodes[ptr+parameter]
 	default:
 		panic(fmt.Errorf("Unexpected parameter mode: %d", parameter_mode))
