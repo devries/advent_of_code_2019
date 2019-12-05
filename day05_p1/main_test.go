@@ -12,6 +12,8 @@ func TestExecution(t *testing.T) {
 	}{
 		{"3,0,4,0,99", []int{1}, []int{1}},
 		{"3,0,4,0,99", []int{2}, []int{2}},
+		{"3,3,104,0,99", []int{1}, []int{1}},
+		{"3,3,104,0,99", []int{2}, []int{2}},
 	}
 
 	for _, test := range tests {
