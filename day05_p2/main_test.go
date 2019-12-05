@@ -34,21 +34,21 @@ func TestExecution(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		input_opcodes, err := ParseProgram(test.program)
+		inputOpcodes, err := ParseProgram(test.program)
 		if err != nil {
 			t.Errorf("Error parsing input: %s", err)
 			continue
 		}
 
-		var test_output []int
-		err = ExecuteProgram(input_opcodes, test.input, &test_output)
+		var testOutput []int
+		err = ExecuteProgram(inputOpcodes, test.input, &testOutput)
 		if err != nil {
 			t.Errorf("Error executing program: %s", err)
 			continue
 		}
 
-		if test_output[0] != test.output[0] {
-			t.Errorf("Got %d, expected %d", test_output[0], test.output[0])
+		if testOutput[0] != test.output[0] {
+			t.Errorf("Got %d, expected %d", testOutput[0], test.output[0])
 		}
 	}
 }
