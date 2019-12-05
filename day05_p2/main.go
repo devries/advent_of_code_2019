@@ -15,7 +15,7 @@ func main() {
 
 	program := string(content)
 	program = strings.TrimSpace(program)
-	starting_opcodes, err := ParseProgram(program)
+	startingOpcodes, err := ParseProgram(program)
 	if err != nil {
 		panic(fmt.Errorf("Error parsing program: %s", err))
 	}
@@ -23,13 +23,14 @@ func main() {
 	input := []int{5}
 	var output []int
 
-	if err := ExecuteProgram(starting_opcodes, input, &output); err != nil {
+	if err := ExecuteProgram(startingOpcodes, input, &output); err != nil {
 		panic(fmt.Errorf("Error executing program: %s", err))
 	}
 
 	fmt.Println(output)
 }
 
+// ParseProgram parses an intcode program for the emulator.
 func ParseProgram(program string) ([]int, error) {
 	positions := strings.Split(program, ",")
 
@@ -46,6 +47,9 @@ func ParseProgram(program string) ([]int, error) {
 	return opcodes, nil
 }
 
+// ExecuteProgram is an Intcode computer emulator. An array of integers representing
+// the program is provided by the opcodes argument. Inputs are provided via the input
+// argument, and a pointer to outputs is provided by the output argument.
 func ExecuteProgram(opcodes []int, input []int, output *[]int) error {
 	for ptr := 0; ptr < len(opcodes); {
 		// Perform instruction parsing
@@ -117,9 +121,9 @@ func ParameterMode(opcodes []int, ptr int, parameter int) int {
 	for i := 0; i < parameter; i++ {
 		j *= 10
 	}
-	parameter_mode := (opcodes[ptr] / j) % 10
+	parameterMode := (opcodes[ptr] / j) % 10
 
-	switch parameter_mode {
+	switch parameterMode {
 	case 0:
 		// Position mode (return value at the position of parameter)
 		return opcodes[opcodes[ptr+parameter]]
@@ -127,7 +131,6 @@ func ParameterMode(opcodes []int, ptr int, parameter int) int {
 		// Immediate mode (return value of parameter)
 		return opcodes[ptr+parameter]
 	default:
-		panic(fmt.Errorf("Unexpected parameter mode: %d", parameter_mode))
+		panic(fmt.Errorf("Unexpected parameter mode %d for opcode %d at position %d", parameterMode, opcodes[ptr], ptr))
 	}
-	return 0
 }
