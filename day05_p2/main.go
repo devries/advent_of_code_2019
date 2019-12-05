@@ -49,21 +49,16 @@ func ParseProgram(program string) ([]int, error) {
 func ExecuteProgram(opcodes []int, input []int, output *[]int) error {
 	for ptr := 0; ptr < len(opcodes); {
 		// Perform instruction parsing
-		instruction := opcodes[ptr]
-		opcode := instruction % 100
-		param_modes := make([]int, 3)
-		for i, j := 0, 100; i < 3; i, j = i+1, j*10 {
-			param_modes[i] = (instruction / j) % 10
-		}
+		opcode := opcodes[ptr] % 100
 
 		switch opcode {
 		case 1:
 			// ADD
-			opcodes[opcodes[ptr+3]] = ParameterMode(opcodes, param_modes[0], ptr+1) + ParameterMode(opcodes, param_modes[1], ptr+2)
+			opcodes[opcodes[ptr+3]] = ParameterMode(opcodes, ptr, 1) + ParameterMode(opcodes, ptr, 2)
 			ptr += 4
 		case 2:
 			// MULTIPLY
-			opcodes[opcodes[ptr+3]] = ParameterMode(opcodes, param_modes[0], ptr+1) * ParameterMode(opcodes, param_modes[1], ptr+2)
+			opcodes[opcodes[ptr+3]] = ParameterMode(opcodes, ptr, 1) * ParameterMode(opcodes, ptr, 2)
 			ptr += 4
 		case 3:
 			// INPUT
@@ -72,25 +67,25 @@ func ExecuteProgram(opcodes []int, input []int, output *[]int) error {
 			ptr += 2
 		case 4:
 			// OUTPUT
-			*output = append(*output, ParameterMode(opcodes, param_modes[0], ptr+1))
+			*output = append(*output, ParameterMode(opcodes, ptr, 1))
 			ptr += 2
 		case 5:
 			// JUMP if TRUE
-			if ParameterMode(opcodes, param_modes[0], ptr+1) == 0 {
+			if ParameterMode(opcodes, ptr, 1) == 0 {
 				ptr += 3
 			} else {
-				ptr = ParameterMode(opcodes, param_modes[1], ptr+2)
+				ptr = ParameterMode(opcodes, ptr, 2)
 			}
 		case 6:
 			// JUMP if FALSE
-			if ParameterMode(opcodes, param_modes[0], ptr+1) == 0 {
-				ptr = ParameterMode(opcodes, param_modes[1], ptr+2)
+			if ParameterMode(opcodes, ptr, 1) == 0 {
+				ptr = ParameterMode(opcodes, ptr, 2)
 			} else {
 				ptr += 3
 			}
 		case 7:
 			// LESS THAN
-			if ParameterMode(opcodes, param_modes[0], ptr+1) < ParameterMode(opcodes, param_modes[1], ptr+2) {
+			if ParameterMode(opcodes, ptr, 1) < ParameterMode(opcodes, ptr, 2) {
 				opcodes[opcodes[ptr+3]] = 1
 			} else {
 				opcodes[opcodes[ptr+3]] = 0
@@ -98,7 +93,7 @@ func ExecuteProgram(opcodes []int, input []int, output *[]int) error {
 			ptr += 4
 		case 8:
 			// EQUALS
-			if ParameterMode(opcodes, param_modes[0], ptr+1) == ParameterMode(opcodes, param_modes[1], ptr+2) {
+			if ParameterMode(opcodes, ptr, 1) == ParameterMode(opcodes, ptr, 2) {
 				opcodes[opcodes[ptr+3]] = 1
 			} else {
 				opcodes[opcodes[ptr+3]] = 0
@@ -114,12 +109,21 @@ func ExecuteProgram(opcodes []int, input []int, output *[]int) error {
 	return fmt.Errorf("Ran out of program without halt")
 }
 
-func ParameterMode(opcodes []int, parameter_mode int, ptr int) int {
+// ParameterMode returns the appropriate value for parameters. The opcodes are the current
+// program opcodes, the ptr is the current program pointer, and the parameter is the number
+// of the parameter starting with 1 (i.e. 1 is the first parameter, 2 is the second...)
+func ParameterMode(opcodes []int, ptr int, parameter int) int {
+	j := 10
+	for i := 0; i < parameter; i++ {
+		j *= 10
+	}
+	parameter_mode := (opcodes[ptr] / j) % 10
+
 	switch parameter_mode {
 	case 0:
-		return opcodes[opcodes[ptr]]
+		return opcodes[opcodes[ptr+parameter]]
 	case 1:
-		return opcodes[ptr]
+		return opcodes[ptr+parameter]
 	default:
 		panic(fmt.Errorf("Unexpected parameter mode: %d", parameter_mode))
 	}
