@@ -65,9 +65,9 @@ func Amplifiers(program []int, phases []int) int {
 		}
 
 		wg.Add(1)
-		go func(i chan int, o chan int) {
+		go func(in chan int, out chan int) {
 			defer wg.Done()
-			if err := ExecuteProgram(ampOpcodes, i, o); err != nil {
+			if err := ExecuteProgram(ampOpcodes, in, out); err != nil {
 				panic(fmt.Errorf("Error executing program: %s", err))
 			}
 		}(inputChannels[i], outputChannel)
