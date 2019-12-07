@@ -78,7 +78,7 @@ func Amplifiers(program []int, phases []int) int {
 	for i := 0; i < 5; i++ {
 		inputChannels[i] <- phases[i]
 	}
-	inputChannels[0] <- 0
+	inputChannels[0] <- signal
 
 	wg.Wait()
 	signal = <-inputChannels[0]
