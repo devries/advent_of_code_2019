@@ -58,11 +58,7 @@ func Amplifiers(program []int, phases []int) int {
 		copy(ampOpcodes, program)
 
 		var outputChannel chan int
-		if i != 4 {
-			outputChannel = inputChannels[i+1]
-		} else {
-			outputChannel = inputChannels[0]
-		}
+		outputChannel = inputChannels[(i+1)%5]
 
 		wg.Add(1)
 		go func(in chan int, out chan int) {
