@@ -48,7 +48,7 @@ func Amplifiers(program []int, phases []int) int {
 
 	var inputChannels [](chan int)
 	for i := 0; i < 5; i++ {
-		inputChannels = append(inputChannels, make(chan int, 2))
+		inputChannels = append(inputChannels, make(chan int, 1))
 	}
 
 	var wg sync.WaitGroup
