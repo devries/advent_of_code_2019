@@ -26,24 +26,32 @@ func main() {
 	}
 
 	// Make drawable image
+	zoom := 10
 	ul := image.Point{0, 0}
-	br := image.Point{im.Width, im.Height}
+	br := image.Point{im.Width * zoom, im.Height * zoom}
 	outputImg := image.NewRGBA(image.Rectangle{ul, br})
 
 	for y := 0; y < im.Height; y++ {
 		for x := 0; x < im.Width; x++ {
+			var pixel color.Color
 			for l := 0; l < im.NumLayers(); l++ {
 				r := im.Get(x, y, l)
 				if r == '0' {
-					outputImg.Set(x, y, color.Black)
+					pixel = color.Black
 					break
 				} else if r == '1' {
-					outputImg.Set(x, y, color.White)
+					pixel = color.White
 					break
 				} else {
 					continue
 				}
 			}
+			for j := y * zoom; j < (y+1)*zoom; j++ {
+				for i := x * zoom; i < (x+1)*zoom; i++ {
+					outputImg.Set(i, j, pixel)
+				}
+			}
+
 		}
 	}
 
