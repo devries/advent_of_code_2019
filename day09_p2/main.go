@@ -62,7 +62,7 @@ func ExecuteProgram(opcodes []int64, input <-chan int64, output chan<- int64) er
 		// Perform instruction parsing
 		opcode := opcodes[ptr] % 100
 
-		// fmt.Printf("Opcode: %d, ptr: %d, fullop: %d, relativeBase: %d\n", opcode, ptr, opcodes[ptr], relativeBase)
+		fmt.Printf("Opcode: %d, ptr: %d, fullop: %d, relativeBase: %d, Memory Length: %d\n", opcode, ptr, opcodes[ptr], relativeBase, len(opcodes))
 		// fmt.Printf("Program: %v (len: %d)\n\n", opcodes, len(opcodes))
 		switch opcode {
 		case 1:
@@ -181,8 +181,8 @@ func ParameterSetAddress(opcodes *[]int64, ptr int64, parameter int64, relativeB
 }
 
 func GetMemory(memory *[]int64, loc int64) int64 {
-	if loc > int64(len(*memory)) {
-		expansion := loc - int64(len(*memory)) + 2
+	if loc >= int64(len(*memory)) {
+		expansion := loc - int64(len(*memory)) + 1
 		*memory = append(*memory, make([]int64, expansion)...)
 		return 0
 	} else {
@@ -191,8 +191,8 @@ func GetMemory(memory *[]int64, loc int64) int64 {
 }
 
 func SetMemory(memory *[]int64, loc int64, value int64) {
-	if loc > int64(len(*memory)) {
-		expansion := loc - int64(len(*memory)) + 2
+	if loc >= int64(len(*memory)) {
+		expansion := loc - int64(len(*memory)) + 1
 		*memory = append(*memory, make([]int64, expansion)...)
 	}
 

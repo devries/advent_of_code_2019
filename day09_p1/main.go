@@ -181,8 +181,8 @@ func ParameterSetAddress(opcodes *[]int64, ptr int64, parameter int64, relativeB
 }
 
 func GetMemory(memory *[]int64, loc int64) int64 {
-	if loc > int64(len(*memory)) {
-		expansion := loc - int64(len(*memory)) + 2
+	if loc >= int64(len(*memory)) {
+		expansion := loc - int64(len(*memory)) + 1
 		*memory = append(*memory, make([]int64, expansion)...)
 		return 0
 	} else {
@@ -191,8 +191,8 @@ func GetMemory(memory *[]int64, loc int64) int64 {
 }
 
 func SetMemory(memory *[]int64, loc int64, value int64) {
-	if loc > int64(len(*memory)) {
-		expansion := loc - int64(len(*memory)) + 2
+	if loc >= int64(len(*memory)) {
+		expansion := loc - int64(len(*memory)) + 1
 		*memory = append(*memory, make([]int64, expansion)...)
 	}
 
