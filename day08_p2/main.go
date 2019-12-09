@@ -27,33 +27,7 @@ func main() {
 
 	// Make drawable image
 	zoom := 10
-	ul := image.Point{0, 0}
-	br := image.Point{im.Width * zoom, im.Height * zoom}
-	outputImg := image.NewRGBA(image.Rectangle{ul, br})
-
-	for y := 0; y < im.Height; y++ {
-		for x := 0; x < im.Width; x++ {
-			var pixel color.Color
-			for l := 0; l < im.NumLayers(); l++ {
-				r := im.Get(x, y, l)
-				if r == '0' {
-					pixel = color.Black
-					break
-				} else if r == '1' {
-					pixel = color.White
-					break
-				} else {
-					continue
-				}
-			}
-			for j := y * zoom; j < (y+1)*zoom; j++ {
-				for i := x * zoom; i < (x+1)*zoom; i++ {
-					outputImg.Set(i, j, pixel)
-				}
-			}
-
-		}
-	}
+	outputImg := im.CreateImage(zoom)
 
 	f, _ := os.Create("image.png")
 	defer f.Close()
@@ -76,4 +50,37 @@ func (im *SpaceImage) NumLayers() int {
 	res := len(im.Data) / (im.Width * im.Height)
 
 	return res
+}
+
+func (im *SpaceImage) CreateImage(zoom int) image.Image {
+	ul := image.Point{0, 0}
+	br := image.Point{im.Width * zoom, im.Height * zoom}
+	outputImg := image.NewRGBA(image.Rectangle{ul, br})
+
+	colorMap := map[rune]color.Color{
+		'0': color.Black,
+		'1': color.White,
+	}
+
+	for y := 0; y < im.Height; y++ {
+		for x := 0; x < im.Width; x++ {
+			var pixel color.Color
+			for l := 0; l < im.NumLayers(); l++ {
+				r := im.Get(x, y, l)
+				if r == '2' {
+					continue
+				}
+
+				pixel = colorMap[r]
+				break
+			}
+			for j := y * zoom; j < (y+1)*zoom; j++ {
+				for i := x * zoom; i < (x+1)*zoom; i++ {
+					outputImg.Set(i, j, pixel)
+				}
+			}
+		}
+	}
+
+	return outputImg
 }
