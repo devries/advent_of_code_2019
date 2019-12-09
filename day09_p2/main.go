@@ -29,7 +29,7 @@ func main() {
 		}
 	}()
 
-	input <- int64(1)
+	input <- int64(2)
 
 	for oline := range output {
 		fmt.Println(oline)
