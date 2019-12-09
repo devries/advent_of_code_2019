@@ -148,21 +148,19 @@ func ParameterValue(opcodes map[int64]int64, ptr int64, parameter int64, relativ
 	switch parameterMode {
 	case 0:
 		// Position mode (return value at the position of parameter)
-		// return GetMemory(opcodes, GetMemory(opcodes, ptr+parameter))
 		return opcodes[opcodes[ptr+parameter]]
 	case 1:
 		// Immediate mode (return value of parameter)
-		// return GetMemory(opcodes, ptr+parameter)
 		return opcodes[ptr+parameter]
 	case 2:
 		// Relative mode
-		// return GetMemory(opcodes, GetMemory(opcodes, ptr+parameter)+relativeBase)
 		return opcodes[opcodes[ptr+parameter]+relativeBase]
 	default:
 		panic(fmt.Errorf("Unexpected parameter mode %d for opcode %d at position %d", parameterMode, opcodes[ptr], ptr))
 	}
 }
 
+// This returns the address to write to using the parameter mode
 func ParameterSetAddress(opcodes map[int64]int64, ptr int64, parameter int64, relativeBase int64) int64 {
 	j := int64(10)
 	for i := int64(0); i < parameter; i++ {
@@ -172,10 +170,10 @@ func ParameterSetAddress(opcodes map[int64]int64, ptr int64, parameter int64, re
 
 	switch parameterMode {
 	case 0:
-		// return GetMemory(opcodes, ptr+parameter)
+		// Address in position mode
 		return opcodes[ptr+parameter]
 	case 2:
-		// return GetMemory(opcodes, ptr+parameter) + relativeBase
+		// Address in relative mode
 		return opcodes[ptr+parameter] + relativeBase
 	default:
 		panic(fmt.Errorf("Unexpected set parameter mode %d for opcode %d at position %d", parameterMode, opcodes[ptr], ptr))
