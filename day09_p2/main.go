@@ -58,11 +58,13 @@ func ParseProgram(program string) ([]int64, error) {
 // by integer channels
 func ExecuteProgram(opcodes []int64, input <-chan int64, output chan<- int64) error {
 	relativeBase := int64(0)
+	counter := int64(0)
 	for ptr := int64(0); ptr < int64(len(opcodes)); {
 		// Perform instruction parsing
 		opcode := opcodes[ptr] % 100
+		counter++
 
-		fmt.Printf("Opcode: %d, ptr: %d, fullop: %d, relativeBase: %d, Memory Length: %d\n", opcode, ptr, opcodes[ptr], relativeBase, len(opcodes))
+		fmt.Printf("%d --> Opcode: %d, ptr: %d, fullop: %d, relativeBase: %d, Memory Length: %d\n", counter, opcode, ptr, opcodes[ptr], relativeBase, len(opcodes))
 		// fmt.Printf("Program: %v (len: %d)\n\n", opcodes, len(opcodes))
 		switch opcode {
 		case 1:
