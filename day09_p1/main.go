@@ -67,60 +67,60 @@ func ExecuteProgram(opcodes []int64, input <-chan int64, output chan<- int64) er
 		switch opcode {
 		case 1:
 			// ADD
-			SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 3, relativeBase),
-				ParameterMode(&opcodes, ptr, 1, relativeBase)+ParameterMode(&opcodes, ptr, 2, relativeBase))
+			SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 3, relativeBase),
+				ParameterValue(&opcodes, ptr, 1, relativeBase)+ParameterValue(&opcodes, ptr, 2, relativeBase))
 			ptr += 4
 		case 2:
 			// MULTIPLY
-			SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 3, relativeBase), // GetMemory(&opcodes, ptr+3),
-				ParameterMode(&opcodes, ptr, 1, relativeBase)*ParameterMode(&opcodes, ptr, 2, relativeBase))
+			SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 3, relativeBase), // GetMemory(&opcodes, ptr+3),
+				ParameterValue(&opcodes, ptr, 1, relativeBase)*ParameterValue(&opcodes, ptr, 2, relativeBase))
 			ptr += 4
 		case 3:
 			// INPUT
-			SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 1, relativeBase), //GetMemory(&opcodes, ptr+1),
+			SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 1, relativeBase), //GetMemory(&opcodes, ptr+1),
 				<-input)
 			ptr += 2
 		case 4:
 			// OUTPUT
-			output <- ParameterMode(&opcodes, ptr, 1, relativeBase)
+			output <- ParameterValue(&opcodes, ptr, 1, relativeBase)
 			ptr += 2
 		case 5:
 			// JUMP if TRUE
-			if ParameterMode(&opcodes, ptr, 1, relativeBase) == 0 {
+			if ParameterValue(&opcodes, ptr, 1, relativeBase) == 0 {
 				ptr += 3
 			} else {
-				ptr = ParameterMode(&opcodes, ptr, 2, relativeBase)
+				ptr = ParameterValue(&opcodes, ptr, 2, relativeBase)
 			}
 		case 6:
 			// JUMP if FALSE
-			if ParameterMode(&opcodes, ptr, 1, relativeBase) == 0 {
-				ptr = ParameterMode(&opcodes, ptr, 2, relativeBase)
+			if ParameterValue(&opcodes, ptr, 1, relativeBase) == 0 {
+				ptr = ParameterValue(&opcodes, ptr, 2, relativeBase)
 			} else {
 				ptr += 3
 			}
 		case 7:
 			// LESS THAN
-			if ParameterMode(&opcodes, ptr, 1, relativeBase) < ParameterMode(&opcodes, ptr, 2, relativeBase) {
-				SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
+			if ParameterValue(&opcodes, ptr, 1, relativeBase) < ParameterValue(&opcodes, ptr, 2, relativeBase) {
+				SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
 					1)
 			} else {
-				SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
+				SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
 					0)
 			}
 			ptr += 4
 		case 8:
 			// EQUALS
-			if ParameterMode(&opcodes, ptr, 1, relativeBase) == ParameterMode(&opcodes, ptr, 2, relativeBase) {
-				SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
+			if ParameterValue(&opcodes, ptr, 1, relativeBase) == ParameterValue(&opcodes, ptr, 2, relativeBase) {
+				SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
 					1)
 			} else {
-				SetMemory(&opcodes, SetParameterMode(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
+				SetMemory(&opcodes, ParameterSetAddress(&opcodes, ptr, 3, relativeBase), //GetMemory(&opcodes, ptr+3),
 					0)
 			}
 			ptr += 4
 		case 9:
 			// Adjust relative base by Parameter
-			relativeBase += ParameterMode(&opcodes, ptr, 1, relativeBase)
+			relativeBase += ParameterValue(&opcodes, ptr, 1, relativeBase)
 			ptr += 2
 		case 99:
 			// HALT
@@ -138,10 +138,10 @@ func ExecuteProgram(opcodes []int64, input <-chan int64, output chan<- int64) er
 	return fmt.Errorf("Ran out of program without halt")
 }
 
-// ParameterMode returns the appropriate value for parameters. The opcodes are the current
+// ParameterValue returns the appropriate value for parameters. The opcodes are the current
 // program opcodes, the ptr is the current program pointer, and the parameter is the number
 // of the parameter starting with 1 (i.e. 1 is the first parameter, 2 is the second...)
-func ParameterMode(opcodes *[]int64, ptr int64, parameter int64, relativeBase int64) int64 {
+func ParameterValue(opcodes *[]int64, ptr int64, parameter int64, relativeBase int64) int64 {
 	j := int64(10)
 	for i := int64(0); i < parameter; i++ {
 		j *= 10
@@ -163,7 +163,7 @@ func ParameterMode(opcodes *[]int64, ptr int64, parameter int64, relativeBase in
 	}
 }
 
-func SetParameterMode(opcodes *[]int64, ptr int64, parameter int64, relativeBase int64) int64 {
+func ParameterSetAddress(opcodes *[]int64, ptr int64, parameter int64, relativeBase int64) int64 {
 	j := int64(10)
 	for i := int64(0); i < parameter; i++ {
 		j *= 10
