@@ -29,13 +29,13 @@ func main() {
 
 	r.Run(startingOpcodes, panels)
 
-	outputImg := PanelImage(panels)
+	outputImg := PanelImage(panels, 10)
 	f, _ := os.Create("image.png")
 	defer f.Close()
 	png.Encode(f, outputImg)
 }
 
-func PanelImage(panels map[Point]int64) image.Image {
+func PanelImage(panels map[Point]int64, zoom int) image.Image {
 	minX, minY, maxX, maxY := 0, 0, 0, 0
 
 	for k, _ := range panels {
@@ -53,8 +53,8 @@ func PanelImage(panels map[Point]int64) image.Image {
 		}
 	}
 
-	ul := image.Point{minX, minY}
-	br := image.Point{maxX + 1, maxY + 1}
+	ul := image.Point{minX * zoom, minY * zoom}
+	br := image.Point{(maxX + 1) * zoom, (maxY + 1) * zoom}
 	//outputImg := image.NewRGBA(image.Rectangle{ul, br})
 	outputImg := image.NewGray(image.Rectangle{ul, br})
 
@@ -66,7 +66,11 @@ func PanelImage(panels map[Point]int64) image.Image {
 	for j := minY; j <= maxY; j++ {
 		for i := minX; i <= maxX; i++ {
 			c := panels[Point{i, j}]
-			outputImg.Set(i, j, colorMap[c])
+			for k := 0; k < 10; k++ {
+				for h := 0; h < 10; h++ {
+					outputImg.Set(10*i+h, 10*j+k, colorMap[c])
+				}
+			}
 		}
 	}
 
