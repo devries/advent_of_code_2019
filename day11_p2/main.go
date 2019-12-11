@@ -55,7 +55,8 @@ func PanelImage(panels map[Point]int64) image.Image {
 
 	ul := image.Point{minX, minY}
 	br := image.Point{maxX + 1, maxY + 1}
-	outputImg := image.NewRGBA(image.Rectangle{ul, br})
+	//outputImg := image.NewRGBA(image.Rectangle{ul, br})
+	outputImg := image.NewGray(image.Rectangle{ul, br})
 
 	colorMap := map[int64]color.Color{
 		0: color.Black,
