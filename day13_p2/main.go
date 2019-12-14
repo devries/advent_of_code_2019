@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -59,7 +60,10 @@ mainloop:
 				}
 				loopit = false
 			case input <- motion:
-				fmt.Printf("Joystick: %d\n", motion)
+				// fmt.Printf("Joystick: %d\n", motion)
+				fmt.Printf("\033[3J\033[H")
+				printScreen(screen)
+				time.Sleep(100 * time.Millisecond)
 			}
 		}
 
@@ -74,6 +78,8 @@ mainloop:
 			if CountBlocks(screen) == 0 {
 				break mainloop
 			}
+			//fmt.Printf("\033[3J\033[H")
+			//printScreen(screen)
 		} else {
 			screen[Point{x, y}] = tileID
 		}
@@ -106,7 +112,7 @@ func CountBlocks(screen map[Point]int64) int {
 }
 
 func predictTrajectory(prev_ball Point, ball Point, paddle Point, screen map[Point]int64) int64 {
-	fmt.Printf("Sending paddle to %d\n", ball.X)
+	// fmt.Printf("Sending paddle to %d\n", ball.X)
 	return ball.X
 }
 
@@ -136,13 +142,13 @@ func printScreen(screen map[Point]int64) {
 			case 0:
 				fmt.Printf(" ")
 			case 1:
-				fmt.Printf("#")
+				fmt.Printf("█")
 			case 2:
-				fmt.Printf("O")
+				fmt.Printf("█")
 			case 3:
-				fmt.Printf("-")
+				fmt.Printf("—")
 			case 4:
-				fmt.Printf("X")
+				fmt.Printf("●")
 			}
 		}
 		fmt.Printf("\n")
