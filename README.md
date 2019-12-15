@@ -17,4 +17,6 @@
 - Day 11: Space Police (Intcode) [part 1](day11_p1) [part 2](day11_p2)
 - Day 12: The N-Body Problem [part 1](day12_p1) [part 2](day12_p2)
 - Day 13: Care Package (Intcode) [part 1](day13_p1) [part 2](day13_p2)
+- Day 14: Space Stoichiometry **Skipped**
+- Day 15: Oxygen System (Intcode) [part 1](day15_p1) [part 2](day15_p2)
 
