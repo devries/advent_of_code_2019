@@ -63,7 +63,8 @@ mainloop:
 				// fmt.Printf("Joystick: %d\n", motion)
 				fmt.Printf("\033[3J\033[H")
 				printScreen(screen)
-				time.Sleep(100 * time.Millisecond)
+				fmt.Printf("\n%d\n", score)
+				time.Sleep(50 * time.Millisecond)
 			}
 		}
 
@@ -90,9 +91,11 @@ mainloop:
 			ball = Point{x, y}
 		}
 	}
-
+	fmt.Printf("\033[3J\033[H")
 	printScreen(screen)
-	fmt.Println(score)
+	fmt.Printf("\n%d\n", score)
+
+	// fmt.Println(score)
 }
 
 type Point struct {
