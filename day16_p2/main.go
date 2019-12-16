@@ -12,6 +12,7 @@ func main() {
 	digits, err := parseNumber(input)
 	// digits, err := parseNumber("03036732577212944063491565474664")
 	// digits, err := parseNumber("02935109699940807407585447034323")
+	// digits, err := parseNumber("03081770884921959731165446850517")
 	if err != nil {
 		panic(fmt.Errorf("Error parsing input: %s", err))
 	}
@@ -74,13 +75,17 @@ func RepeatFFT(indigits []int, repeat int, start, stop int) []int {
 		for k := l/2 - 1; k >= Min(l/4, start); k-- {
 			sum += temp[k]
 			sum -= temp[2*k]
+			sum -= temp[2*k+1]
 			digit = Abs(sum) % 10
 			out[k] = digit
 		}
 		for k := l/4 - 1; k >= start; k++ {
 			sum += temp[k]
 			sum -= temp[2*k]
+			sum -= temp[2*k+1]
 			sum -= temp[3*k]
+			sum -= temp[3*k+1]
+			sum -= temp[3*k+2]
 			digit = Abs(sum) % 10
 			out[k] = digit
 		}
