@@ -30,6 +30,8 @@ func main() {
 	}()
 
 	compartment := make(map[Point]rune)
+	compartment[Point{0, 0}] = ' '
+
 	fmt.Printf("\033[H\033[J\033[H")
 
 	explore(nil, 1, input, output, compartment)
@@ -194,7 +196,7 @@ func printMap(c map[Point]rune) {
 		for i := minX; i <= maxX; i++ {
 			p := c[Point{i, j}]
 			if p == 0 {
-				fmt.Printf("X")
+				fmt.Printf("?")
 			} else {
 				fmt.Printf("%c", p)
 			}
