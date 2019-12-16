@@ -30,13 +30,15 @@ func main() {
 	}()
 
 	compartment := make(map[Point]rune)
+	fmt.Printf("\033[H\033[J\033[H")
 
 	explore(nil, 1, input, output, compartment)
 	explore(nil, 2, input, output, compartment)
 	explore(nil, 3, input, output, compartment)
 	explore(nil, 4, input, output, compartment)
 
-	fmt.Printf("\033[H\033[J\033[H")
+	// fmt.Printf("\033[H\033[J\033[H")
+	fmt.Printf("\033[3J\033[H")
 	printMap(compartment)
 
 	minutes := 0
@@ -121,6 +123,10 @@ func explore(path []int64, direction int64, input chan int64, output chan int64,
 		} else {
 			compartment[getLocation(newpath)] = 'O'
 		}
+		fmt.Printf("\033[3J\033[H")
+		printMap(compartment)
+		time.Sleep(50 * time.Millisecond)
+
 		if !detectCycle(newpath) {
 			if direction != 2 {
 				explore(newpath, 1, input, output, compartment)
@@ -188,7 +194,7 @@ func printMap(c map[Point]rune) {
 		for i := minX; i <= maxX; i++ {
 			p := c[Point{i, j}]
 			if p == 0 {
-				fmt.Printf("!")
+				fmt.Printf("X")
 			} else {
 				fmt.Printf("%c", p)
 			}
