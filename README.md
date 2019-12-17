@@ -20,3 +20,4 @@
 - Day 14: Space Stoichiometry [part 1](day14_p1) [part2](day14_p2)
 - Day 15: Oxygen System (Intcode) [part 1](day15_p1) [part 2](day15_p2)
 - Day 16: Flawed Frequency Transmission [part 1](day16_p1) [part 2](day16_p2)
+- Day 17: Set and Forget (Intcode) [part 1](day17_p1) [part 2](day17_p2)
