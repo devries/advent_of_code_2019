@@ -21,5 +21,4 @@
 - Day 15: Oxygen System (Intcode) [part 1](day15_p1) [part 2](day15_p2)
 - Day 16: Flawed Frequency Transmission [part 1](day16_p1) [part 2](day16_p2)
 - Day 17: Set and Forget (Intcode) [part 1](day17_p1) [part 2](day17_p2)
-- Day 18: Many-Worlds Interpretation [part 1](day18_p1) [part 2 -
-  incomplete](day18_p2)
+- Day 18: Many-Worlds Interpretation [part 1](day18_p1) [part 2](day18_p2)

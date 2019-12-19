@@ -20,87 +20,74 @@ func main() {
 
 	printMap(grid)
 
+	// Each quadrant's path is independant
+	q1 := Search(grid, Point{0, 0}, Point{40, 40})
+	fmt.Println(q1)
+	q2 := Search(grid, Point{40, 0}, Point{80, 40})
+	fmt.Println(q2)
+	q3 := Search(grid, Point{0, 40}, Point{40, 80})
+	fmt.Println(q3)
+	q4 := Search(grid, Point{40, 40}, Point{80, 80})
+
+	fmt.Printf("Total: %d\n", q1+q2+q3+q4)
+}
+
+func Search(grid map[Point]rune, min Point, max Point) int {
 	queue := NewStateQueue()
 	seen := make(map[State]bool)
-	all := allKeys(grid)
+	all := allKeys(grid, min, max)
 
-	maxsteps := 0
+	sp := getStartingPosition(grid, min, max)
 
-	startPositions := getStartingPosition(grid)
-	spa, spb, spc, spd := startPositions[0], startPositions[1], startPositions[2], startPositions[3]
-	startState := State{spa, spb, spc, spd, KeyStore(0)}
+	startState := State{sp, KeyStore(0)}
 	startStep := StateStep{startState, 0}
 
-	fmt.Println(startState)
 	seen[startState] = true
 	queue.Add(startStep)
 
 	for queue.Available() {
 		state := queue.Pop()
 		for _, d := range directions {
+			p := Point{state.Position.X + d.X, state.Position.Y + d.Y}
+			keys := state.Keys
+			steps := state.Steps + 1
 
-			for robot := 0; robot < 4; robot++ {
-				positions := []Point{state.PosA, state.PosB, state.PosC, state.PosD}
-				positions[robot] = Point{positions[robot].X + d.X, positions[robot].Y + d.Y}
-				p := positions[robot]
-				keys := state.Keys
-				steps := state.Steps + 1
-				if steps > maxsteps {
-					maxsteps = steps
-					fmt.Printf("%d steps %026b\n", maxsteps, keys)
+			newstate := State{p, keys}
+			newstep := StateStep{newstate, steps}
+
+			if grid[p] == '#' {
+				// Don't continue into a wall
+				continue
+			} else if seen[newstate] {
+				continue
+			} else if grid[p] >= 'a' && grid[p] <= 'z' {
+				// Pick up key
+				keys = keys.Add(grid[p])
+				if keys == all {
+					fmt.Printf("Steps: %d\n", steps)
+					return steps
 				}
+				newstate.Keys = keys
+				newstep.Keys = keys
 
-				spa, spb, spc, spd := positions[0], positions[1], positions[2], positions[3]
-				newstate := State{spa, spb, spc, spd, keys}
-				newstep := StateStep{newstate, steps}
-
-				if grid[p] == '#' {
-					// Don't continue into a wall
-					continue
-				} else if seen[newstate] {
-					continue
-				} else if grid[p] >= 'a' && grid[p] <= 'z' {
-					// Pick up key
-					keys = keys.Add(grid[p])
-					if keys == all {
-						fmt.Printf("Steps: %d\n", steps)
-						return
-					}
-					newstate.Keys = keys
-					newstep.Keys = keys
-
-					queue.Add(newstep)
+				queue.Add(newstep)
+				seen[newstate] = true
+			} else if grid[p] >= 'A' && grid[p] <= 'Z' {
+				if !all.Contains(grid[p]-'A'+'a') || keys.Contains(grid[p]-'A'+'a') {
 					seen[newstate] = true
-				} else if grid[p] >= 'A' && grid[p] <= 'Z' {
-					if keys.Contains(grid[p] - 'A' + 'a') {
-						seen[newstate] = true
-						queue.Add(newstep)
-					} else {
-						continue
-					}
-				} else if grid[p] == '.' || grid[p] == '@' {
-					for isHallway(grid, p, d) {
-						p = nextStep(grid, p, d)
-						positions[robot] = p
-						steps++
-						spa, spb, spc, spd := positions[0], positions[1], positions[2], positions[3]
-						newstate = State{spa, spb, spc, spd, keys}
-						newstep = StateStep{newstate, steps}
-					}
-					if !seen[newstate] {
-						seen[newstate] = true
-						queue.Add(newstep)
-					}
+					queue.Add(newstep)
 				} else {
-					fmt.Printf("Unexpected grid point at %v: %c\n", p, grid[p])
-					fmt.Printf("OLD  : %+v\n", state)
-					fmt.Printf("State: %+v\n", newstep)
-					return
+					continue
 				}
+			} else if grid[p] == '.' || grid[p] == '@' {
+				seen[newstate] = true
+				queue.Add(newstep)
+			} else {
+				fmt.Printf("Unexpected grid point: %c\n", grid[p])
 			}
 		}
 	}
-
+	return 0
 }
 
 type Point struct {
@@ -135,11 +122,8 @@ func (k KeyStore) Contains(r rune) bool {
 }
 
 type State struct {
-	PosA Point
-	PosB Point
-	PosC Point
-	PosD Point
-	Keys KeyStore
+	Position Point
+	Keys     KeyStore
 }
 
 type StateStep struct {
@@ -225,68 +209,30 @@ func printMap(c map[Point]rune) {
 	}
 }
 
-func allKeys(grid map[Point]rune) KeyStore {
+func allKeys(grid map[Point]rune, min Point, max Point) KeyStore {
 	r := KeyStore(0)
 
-	for _, v := range grid {
-		if v >= 'a' && v <= 'z' {
-			r = r.Add(v)
+	for j := min.Y; j <= max.Y; j++ {
+		for i := min.X; i <= max.X; i++ {
+			v := grid[Point{i, j}]
+			if v >= 'a' && v <= 'z' {
+				r = r.Add(v)
+			}
 		}
 	}
 
 	return r
 }
 
-func getStartingPosition(grid map[Point]rune) []Point {
-	r := []Point{}
-
-	for k, v := range grid {
-		if v == '@' {
-			r = append(r, k)
-		}
-	}
-
-	return r
-}
-
-func isHallway(grid map[Point]rune, p Point, direction Point) bool {
-	backtrack := Point{p.X - direction.X, p.Y - direction.Y}
-
-	openCount := 0
-	for j := p.Y - 1; j <= p.Y+1; j++ {
-		for i := p.X - 1; i <= p.X+1; i++ {
-			test := Point{i, j}
-			if test == backtrack {
-				continue
-			}
-			if grid[test] == '.' || grid[test] == '@' {
-				openCount++
-			} else if grid[test] != '#' {
-				return false
+func getStartingPosition(grid map[Point]rune, min Point, max Point) Point {
+	for j := min.Y; j <= max.Y; j++ {
+		for i := min.X; i <= max.X; i++ {
+			v := grid[Point{i, j}]
+			if v == '@' {
+				return Point{i, j}
 			}
 		}
 	}
 
-	if openCount == 2 {
-		return true
-	} else {
-		return false
-	}
-}
-
-func nextStep(grid map[Point]rune, p Point, direction Point) Point {
-	backtrack := Point{p.X - direction.X, p.Y - direction.Y}
-
-	for j := p.Y - 1; j <= p.Y+1; j++ {
-		for i := p.X - 1; i <= p.X+1; i++ {
-			test := Point{i, j}
-			if test == backtrack || test == p {
-				continue
-			}
-			if grid[test] == '.' || grid[test] == '@' {
-				return test
-			}
-		}
-	}
 	return Point{-1, -1}
 }
