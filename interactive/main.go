@@ -9,7 +9,11 @@ import (
 )
 
 func main() {
-	content, err := ioutil.ReadFile("adventure.ic")
+	if len(os.Args) != 2 {
+		fmt.Fprintf(os.Stderr, "Usage: %s <intcode_filename>\n", os.Args[0])
+		os.Exit(1)
+	}
+	content, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		panic(fmt.Errorf("Error opening file: %s", err))
 	}
