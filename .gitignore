@@ -6,3 +6,6 @@ day03_bonus/part2
 *.o
 day08_p2/image.png
 day11_p2/image.png
+scores.py
+534400.json
+interactive/adventure.ic
