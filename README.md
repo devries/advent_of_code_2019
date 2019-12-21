@@ -26,3 +26,7 @@
 - [Day 17: Set and Forget](https://adventofcode.com/2019/day/17) (Intcode) [part 1](day17_p1) [part 2](day17_p2)
 - [Day 18: Many-Worlds Interpretation](https://adventofcode.com/2019/day/18) [part 1](day18_p1) [part 2](day18_p2)
 - [Day 19: Tractor Beam](https://adventofcode.com/2019/day/19) (Intcode) [part 1](day19_p1) [part 2](day19_p2)
+- [Day 20: Donut Maze](https://adventofcode.com/2019/day/20) [part
+  1](day20_p1) [part 2](day20_p2)
+- [Day 21: Springdroid Adventure](https://adventofcode.com/2019/day/21)
+  (Intcode) [part 1](day21_p1) [part 2](day21_p2)
