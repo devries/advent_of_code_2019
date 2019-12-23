@@ -131,13 +131,3 @@ func OpcodesEqual(a, b []int64) bool {
 	}
 	return true
 }
-
-func CopyProgram(in map[int64]int64) map[int64]int64 {
-	out := make(map[int64]int64)
-
-	for k, v := range in {
-		out[k] = v
-	}
-
-	return out
-}
