@@ -32,3 +32,5 @@
   (Intcode) [part 1](day21_p1) [part 2](day21_p2)
 - [Day 22: Slam Shuffle](https://adventofcode.com/2019/day/22) [part
   1](day22_p1) [part 2](day22_p2)
+- [Day 23: Category Six](https://adventofcode.com/2019/day/23) (Intcode) [part
+  1](day23_p1) [part 2](day23_p2)
