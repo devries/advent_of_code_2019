@@ -30,3 +30,5 @@
   1](day20_p1) [part 2](day20_p2)
 - [Day 21: Springdroid Adventure](https://adventofcode.com/2019/day/21)
   (Intcode) [part 1](day21_p1) [part 2](day21_p2)
+- [Day 22: Slam Shuffle](https://adventofcode.com/2019/day/22) [part
+  1](day22_p1) [part 2](day22_p2)
