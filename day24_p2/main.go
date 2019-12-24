@@ -20,15 +20,11 @@ func main() {
 
 	adjacents := CreateAdjacentsMap(5, 5)
 
-	for i, v := range adjacents {
-		fmt.Printf("%d, %d\n", i, v)
-	}
-
 	for i := 0; i < 200; i++ {
 		state = step(state, 5, 5, adjacents)
 	}
 
-	drawLevels(state, 5, 5)
+	drawLevels(state, 5, 5, false)
 }
 
 func parseInput(r io.Reader, width int) uint32 {
@@ -184,7 +180,7 @@ func step(state map[int]uint32, width, height int, adjacentMap map[uint32][]uint
 	return newstate
 }
 
-func drawLevels(state map[int]uint32, width, height int) {
+func drawLevels(state map[int]uint32, width, height int, draw bool) {
 	lmax := 0
 	lmin := 0
 
@@ -203,24 +199,36 @@ func drawLevels(state map[int]uint32, width, height int) {
 	bugcount := 0
 
 	for level := lmin; level <= lmax; level++ {
-		fmt.Printf("Depth: %d\n", level)
+		if draw {
+			fmt.Printf("Depth: %d\n", level)
+		}
 		for j := 0; j < height; j++ {
 			for i := 0; i < width; i++ {
 				if i == width/2 && j == height/2 {
-					fmt.Printf("?")
+					if draw {
+						fmt.Printf("?")
+					}
 					continue
 				}
 				var pos uint32 = 1 << uint32(j*width+i)
 				if state[level]&pos > 0 {
-					fmt.Printf("#")
+					if draw {
+						fmt.Printf("#")
+					}
 					bugcount++
 				} else {
-					fmt.Printf(".")
+					if draw {
+						fmt.Printf(".")
+					}
 				}
 			}
+			if draw {
+				fmt.Printf("\n")
+			}
+		}
+		if draw {
 			fmt.Printf("\n")
 		}
-		fmt.Printf("\n")
 	}
 
 	fmt.Printf("%d bugs found\n", bugcount)
