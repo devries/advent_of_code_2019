@@ -34,3 +34,5 @@
   1](day22_p1) [part 2](day22_p2)
 - [Day 23: Category Six](https://adventofcode.com/2019/day/23) (Intcode) [part
   1](day23_p1) [part 2](day23_p2)
+- [Day 24: Planet of Discord](https://adventofcode.com/2019/day/24) [part
+  1](day24_p1) [part 2](day24_p2)
