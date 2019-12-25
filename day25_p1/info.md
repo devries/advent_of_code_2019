@@ -11,3 +11,5 @@ I needed to carry the following items:
 - astrolabe
 - mouse
 - prime number
+
+The AI turned out to be not so artificial in this case.
