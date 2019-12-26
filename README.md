@@ -36,5 +36,5 @@
   1](day23_p1) [part 2](day23_p2)
 - [Day 24: Planet of Discord](https://adventofcode.com/2019/day/24) [part
   1](day24_p1) [part 2](day24_p2)
-- [Day 25: Cryostasis](https://adventofcode.com/2019/day/25) [part
+- [Day 25: Cryostasis](https://adventofcode.com/2019/day/25) (Intcode) [part
   1](day25_p1)
