@@ -1,0 +1,24 @@
+north
+north
+take astrolabe
+south
+south
+west
+north
+north
+take prime number
+south
+east
+take space law space brochure
+west
+south
+east
+south
+south
+west
+take mouse
+north
+north
+inv
+east
+

@@ -13,3 +13,5 @@ I needed to carry the following items:
 - prime number
 
 The AI turned out to be not so artificial in this case.
+
+(The ASCII input required is in the [moves](moves.txt) file)
