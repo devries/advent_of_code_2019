@@ -79,20 +79,10 @@ func multicycle(moons []Planet) int64 {
 
 	cz := cycle(p, v)
 
-	cycles := []int64{cx, cy, cz}
-	fmt.Println(cycles)
-	multipliers := []int64{1, 1, 1}
+	lyz := lcm(cy, cz)
+	lxyz := lcm(cx, lyz)
 
-	for {
-		r := []int64{cycles[0] * multipliers[0], cycles[1] * multipliers[1], cycles[2] * multipliers[2]}
-		if r[0] == r[1] && r[1] == r[2] {
-			break
-		}
-		e := MinElement(r)
-		multipliers[e] += 1
-	}
-
-	return cycles[0] * multipliers[0]
+	return lxyz
 }
 
 func cycle(positions []int, velocities []int) int64 {
@@ -251,4 +241,16 @@ func CompareArrays(a []int, b []int) bool {
 		}
 	}
 	return true
+}
+
+func gcd(a, b int64) int64 {
+	if b == 0 {
+		return a
+	} else {
+		return gcd(b, a%b)
+	}
+}
+
+func lcm(a, b int64) int64 {
+	return a * b / gcd(a, b)
 }
