@@ -33,7 +33,7 @@ func main() {
 	lf = lf.Repeat(big.NewInt(nshuffles))
 	r := lf.Inverse(big.NewInt(card))
 
-	fmt.Printf("Card at %s is %d\n", r, card)
+	fmt.Printf("Card at %s is in position %d\n", r, card)
 }
 
 type LinearFunction struct {
