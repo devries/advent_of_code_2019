@@ -9,3 +9,5 @@ day11_p2/image.png
 scores.py
 534400.json
 interactive/*.ic
+interactive/intcodevm
+interactive/*.s
