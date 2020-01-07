@@ -29,12 +29,12 @@ func main() {
 
 	output := make(chan int64)
 	input := make(chan int64)
-	done := make(chan bool)
+	// done := make(chan bool)
 	go func() {
 		if err := ExecuteProgram(opcodes, input, output); err != nil {
 			panic(fmt.Errorf("Error executing program: %s", err))
 		}
-		done <- true
+		// done <- true
 	}()
 
 	keyboard := make(chan rune)
@@ -58,11 +58,15 @@ ioloop:
 
 		if len(toSend) > 0 {
 			select {
-			case c := <-output:
-				if c < 256 {
-					fmt.Printf("%c", c)
+			case c, ok := <-output:
+				if ok {
+					if c < 256 {
+						fmt.Printf("%c", c)
+					} else {
+						fmt.Printf("%d\n", c)
+					}
 				} else {
-					fmt.Printf("%d\n", c)
+					break ioloop
 				}
 			case c := <-keyboard:
 				toSend = append(toSend, c)
@@ -70,21 +74,25 @@ ioloop:
 				toSend = toSend[1:]
 				// fmt.Printf("%c", nextLetter)
 				// nextLetter = int64(toSend[letterCounter])
-			case <-done:
-				break ioloop
+				// case <-done:
+				// break ioloop
 			}
 		} else {
 			select {
-			case c := <-output:
-				if c < 256 {
-					fmt.Printf("%c", c)
+			case c, ok := <-output:
+				if ok {
+					if c < 256 {
+						fmt.Printf("%c", c)
+					} else {
+						fmt.Printf("%d\n", c)
+					}
 				} else {
-					fmt.Printf("%d\n", c)
+					break ioloop
 				}
 			case c := <-keyboard:
 				toSend = append(toSend, c)
-			case <-done:
-				break ioloop
+				// case <-done:
+				// break ioloop
 			}
 		}
 	}
